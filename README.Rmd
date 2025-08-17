@@ -1,0 +1,55 @@
+---
+output:
+  md_document:
+    variant: gfm
+html_preview: false
+---
+
+
+## Load packages and example data
+
+```{r pkg, results="hide", message=FALSE}
+library(ggplot2)
+library(clusterProfiler)
+library(org.Hs.eg.db)
+
+data(geneList, package="DOSE")
+de <- names(geneList)[1:200]
+```
+
+## Functional enrichment analysis
+
+```{r enrichment}
+options(enrichment_force_universe=TRUE)
+bp_allgene <- enrichGO(de, OrgDb = 'org.Hs.eg.db', ont="BP")
+bp_bg1 <- enrichGO(de, OrgDb = 'org.Hs.eg.db', ont="BP", universe = names(geneList))
+
+
+options(enrichment_force_universe=FALSE)
+bp_bg2 <- enrichGO(de, OrgDb = 'org.Hs.eg.db', ont="BP", universe = names(geneList))
+```
+
+
+## Visualization
+
+```{r vis, fig.width=22, fig.height=10, message=FALSE, warning=FALSE}
+myplot <- function(res1, res2) {
+    x <- merge(res1@result, res2@result, by="ID")
+    ggplot(x, aes(pvalue.x, pvalue.y)) + 
+        geom_point(color='steelblue') + 
+        geom_smooth(method='lm', color='firebrick') +
+        geom_abline(slope=1, intercept=0, linetype='dashed') +
+        xlim(0, 1) + ylim(0, 1) + 
+        DOSE::theme_dose()
+}
+
+p1 <- myplot(bp_allgene, bp_bg1) + 
+    xlab('All genes in the genome as universe (p-values)') +
+    ylab("All expressed genes in the experiment as universe (p-values)")
+
+p2 <- myplot(bp_bg2, bp_bg1) +
+    xlab("All expressed genes in the experiment as universe and intersected with the genes in the gene sets (p-values)") +
+    ylab("All expressed genes in the experiment as universe (p-values)")
+
+aplot::plot_list(p1, p2)
+```
