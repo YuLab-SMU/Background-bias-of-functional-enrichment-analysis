@@ -4,7 +4,6 @@
 library(ggplot2)
 ```
 
-    ## Warning: package 'ggplot2' was built under R version 4.5.1
 
 ``` r
 library(clusterProfiler)
@@ -23,13 +22,6 @@ bp_allgene <- enrichGO(de, OrgDb = 'org.Hs.eg.db', ont="BP", universe=allgenes)
 bp_bg1 <- enrichGO(de, OrgDb = 'org.Hs.eg.db', ont="BP", universe = names(geneList))
 
 bp_allgene_kegg <- enrichKEGG(de, universe=allgenes)
-```
-
-    ## Reading KEGG annotation online: "https://rest.kegg.jp/link/hsa/pathway"...
-
-    ## Reading KEGG annotation online: "https://rest.kegg.jp/list/pathway/hsa"...
-
-``` r
 bp_bg1_kegg <- enrichKEGG(de, universe = names(geneList))
 
 options(enrichment_force_universe=FALSE)
