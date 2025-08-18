@@ -80,33 +80,3 @@ aplot::plot_list(p1, p2, p3, p4, p5, p6, ncol=3, tag_levels='A')
 ```
 
 ![](README_files/figure-gfm/vis-1.png)<!-- -->
-
-    ## `geom_smooth()` using formula = 'y ~ x'
-
-    ## Warning: Removed 38 rows containing missing values or values outside the scale
-    ## range (`geom_smooth()`).
-
-    ## `geom_smooth()` using formula = 'y ~ x'
-
-    ## Warning: Removed 2 rows containing missing values or values outside the scale
-    ## range (`geom_smooth()`).
-
-    ## `geom_smooth()` using formula = 'y ~ x'
-
-    ## Warning: Removed 9 rows containing missing values or values outside the scale
-    ## range (`geom_smooth()`).
-
-    ## `geom_smooth()` using formula = 'y ~ x'
-
-    ## Warning: Removed 26 rows containing missing values or values outside the scale
-    ## range (`geom_smooth()`).
-
-    ## `geom_smooth()` using formula = 'y ~ x'
-
-    ## Warning: Removed 10 rows containing missing values or values outside the scale
-    ## range (`geom_smooth()`).
-
-    ## `geom_smooth()` using formula = 'y ~ x'
-
-    ## Warning: Removed 7 rows containing missing values or values outside the scale
-    ## range (`geom_smooth()`).

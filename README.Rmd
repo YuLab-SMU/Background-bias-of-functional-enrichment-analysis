@@ -76,7 +76,7 @@ p6 <- myplot(bp_allgene2_kegg, bp_bg2_kegg) +
 aplot::plot_list(p1, p2, p3, p4, p5, p6, ncol=3, tag_levels='A')
 ```
 
-```{r echo=FALSE, results='hide'}
+```{r echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 pg <- aplot::plot_list(p1, p2, p3, p4, p5, p6, ncol=3, tag_levels='A', tag_size=20)
 ggsave(pg, filename="Fig1.pdf", width=15, height=8)
 ```
