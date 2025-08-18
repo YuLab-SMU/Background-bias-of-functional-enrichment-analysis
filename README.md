@@ -2,10 +2,6 @@
 
 ``` r
 library(ggplot2)
-```
-
-
-``` r
 library(clusterProfiler)
 library(org.Hs.eg.db)
 
