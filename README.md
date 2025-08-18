@@ -2,9 +2,15 @@
 
 ``` r
 library(ggplot2)
+```
+
+    ## Warning: package 'ggplot2' was built under R version 4.5.1
+
+``` r
 library(clusterProfiler)
 library(org.Hs.eg.db)
 
+allgenes <- keys(org.Hs.eg.db)
 data(geneList, package="DOSE")
 de <- names(geneList)[1:200]
 ```
@@ -13,12 +19,24 @@ de <- names(geneList)[1:200]
 
 ``` r
 options(enrichment_force_universe=TRUE)
-bp_allgene <- enrichGO(de, OrgDb = 'org.Hs.eg.db', ont="BP")
+bp_allgene <- enrichGO(de, OrgDb = 'org.Hs.eg.db', ont="BP", universe=allgenes)
 bp_bg1 <- enrichGO(de, OrgDb = 'org.Hs.eg.db', ont="BP", universe = names(geneList))
 
+bp_allgene_kegg <- enrichKEGG(de, universe=allgenes)
+```
+
+    ## Reading KEGG annotation online: "https://rest.kegg.jp/link/hsa/pathway"...
+
+    ## Reading KEGG annotation online: "https://rest.kegg.jp/list/pathway/hsa"...
+
+``` r
+bp_bg1_kegg <- enrichKEGG(de, universe = names(geneList))
 
 options(enrichment_force_universe=FALSE)
+bp_allgene2 <- enrichGO(de, OrgDb = 'org.Hs.eg.db', ont="BP", universe=allgenes)
 bp_bg2 <- enrichGO(de, OrgDb = 'org.Hs.eg.db', ont="BP", universe = names(geneList))
+bp_allgene2_kegg <- enrichKEGG(de, universe = allgenes)
+bp_bg2_kegg <- enrichKEGG(de, universe = names(geneList))
 ```
 
 ## Visualization
@@ -35,14 +53,60 @@ myplot <- function(res1, res2) {
 }
 
 p1 <- myplot(bp_allgene, bp_bg1) + 
-    xlab('All genes in the genome as universe (p-values)') +
-    ylab("All expressed genes in the experiment as universe (p-values)")
+    xlab('All genes in the genome as universe') +
+    ylab("All expressed genes as universe")
 
 p2 <- myplot(bp_bg2, bp_bg1) +
-    xlab("All expressed genes in the experiment as universe and intersected with the genes in the gene sets (p-values)") +
-    ylab("All expressed genes in the experiment as universe (p-values)")
+    xlab("All expressed genes as universe\n(intersected with gene sets)") +
+    ylab("All expressed genes as universe")
 
-aplot::plot_list(p1, p2)
+p3 <- myplot(bp_allgene2, bp_bg2) + 
+    xlab('All genes in the genome as universe\n(intersected with gene sets)') +
+    ylab("All expressed genes as universe\n(intersected with gene sets)")
+
+p4 <- myplot(bp_allgene_kegg, bp_bg1_kegg) + 
+    xlab('All genes in the genome as universe') +
+    ylab("All expressed genes as universe")
+
+p5 <- myplot(bp_bg2_kegg, bp_bg1_kegg) +
+    xlab("All expressed genes as universe\n(intersected with gene sets)") +
+    ylab("All expressed genes as universe")
+
+p6 <- myplot(bp_allgene2_kegg, bp_bg2_kegg) + 
+    xlab('All genes in the genome as universe\n(intersected with gene sets)') +
+    ylab("All expressed genes as universe\n(intersected with gene sets)")
+
+aplot::plot_list(p1, p2, p3, p4, p5, p6, ncol=3, tag_levels='A')
 ```
 
 ![](README_files/figure-gfm/vis-1.png)<!-- -->
+
+    ## `geom_smooth()` using formula = 'y ~ x'
+
+    ## Warning: Removed 38 rows containing missing values or values outside the scale
+    ## range (`geom_smooth()`).
+
+    ## `geom_smooth()` using formula = 'y ~ x'
+
+    ## Warning: Removed 2 rows containing missing values or values outside the scale
+    ## range (`geom_smooth()`).
+
+    ## `geom_smooth()` using formula = 'y ~ x'
+
+    ## Warning: Removed 9 rows containing missing values or values outside the scale
+    ## range (`geom_smooth()`).
+
+    ## `geom_smooth()` using formula = 'y ~ x'
+
+    ## Warning: Removed 26 rows containing missing values or values outside the scale
+    ## range (`geom_smooth()`).
+
+    ## `geom_smooth()` using formula = 'y ~ x'
+
+    ## Warning: Removed 10 rows containing missing values or values outside the scale
+    ## range (`geom_smooth()`).
+
+    ## `geom_smooth()` using formula = 'y ~ x'
+
+    ## Warning: Removed 7 rows containing missing values or values outside the scale
+    ## range (`geom_smooth()`).

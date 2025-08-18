@@ -13,6 +13,7 @@ library(ggplot2)
 library(clusterProfiler)
 library(org.Hs.eg.db)
 
+allgenes <- keys(org.Hs.eg.db)
 data(geneList, package="DOSE")
 de <- names(geneList)[1:200]
 ```
@@ -21,18 +22,23 @@ de <- names(geneList)[1:200]
 
 ```{r enrichment}
 options(enrichment_force_universe=TRUE)
-bp_allgene <- enrichGO(de, OrgDb = 'org.Hs.eg.db', ont="BP")
+bp_allgene <- enrichGO(de, OrgDb = 'org.Hs.eg.db', ont="BP", universe=allgenes)
 bp_bg1 <- enrichGO(de, OrgDb = 'org.Hs.eg.db', ont="BP", universe = names(geneList))
 
+bp_allgene_kegg <- enrichKEGG(de, universe=allgenes)
+bp_bg1_kegg <- enrichKEGG(de, universe = names(geneList))
 
 options(enrichment_force_universe=FALSE)
+bp_allgene2 <- enrichGO(de, OrgDb = 'org.Hs.eg.db', ont="BP", universe=allgenes)
 bp_bg2 <- enrichGO(de, OrgDb = 'org.Hs.eg.db', ont="BP", universe = names(geneList))
+bp_allgene2_kegg <- enrichKEGG(de, universe = allgenes)
+bp_bg2_kegg <- enrichKEGG(de, universe = names(geneList))
 ```
 
 
 ## Visualization
 
-```{r vis, fig.width=22, fig.height=10, message=FALSE, warning=FALSE}
+```{r vis, fig.width=15, fig.height=8, message=FALSE, warning=FALSE}
 myplot <- function(res1, res2) {
     x <- merge(res1@result, res2@result, by="ID")
     ggplot(x, aes(pvalue.x, pvalue.y)) + 
@@ -44,12 +50,33 @@ myplot <- function(res1, res2) {
 }
 
 p1 <- myplot(bp_allgene, bp_bg1) + 
-    xlab('All genes in the genome as universe (p-values)') +
-    ylab("All expressed genes in the experiment as universe (p-values)")
+    xlab('All genes in the genome as universe') +
+    ylab("All expressed genes as universe")
 
 p2 <- myplot(bp_bg2, bp_bg1) +
-    xlab("All expressed genes in the experiment as universe and intersected with the genes in the gene sets (p-values)") +
-    ylab("All expressed genes in the experiment as universe (p-values)")
+    xlab("All expressed genes as universe\n(intersected with gene sets)") +
+    ylab("All expressed genes as universe")
 
-aplot::plot_list(p1, p2)
+p3 <- myplot(bp_allgene2, bp_bg2) + 
+    xlab('All genes in the genome as universe\n(intersected with gene sets)') +
+    ylab("All expressed genes as universe\n(intersected with gene sets)")
+
+p4 <- myplot(bp_allgene_kegg, bp_bg1_kegg) + 
+    xlab('All genes in the genome as universe') +
+    ylab("All expressed genes as universe")
+
+p5 <- myplot(bp_bg2_kegg, bp_bg1_kegg) +
+    xlab("All expressed genes as universe\n(intersected with gene sets)") +
+    ylab("All expressed genes as universe")
+
+p6 <- myplot(bp_allgene2_kegg, bp_bg2_kegg) + 
+    xlab('All genes in the genome as universe\n(intersected with gene sets)') +
+    ylab("All expressed genes as universe\n(intersected with gene sets)")
+
+aplot::plot_list(p1, p2, p3, p4, p5, p6, ncol=3, tag_levels='A')
+```
+
+```{r echo=FALSE, results='hide'}
+pg <- aplot::plot_list(p1, p2, p3, p4, p5, p6, ncol=3, tag_levels='A', tag_size=20)
+ggsave(pg, filename="Fig1.pdf", width=15, height=8)
 ```
