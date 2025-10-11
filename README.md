@@ -35,7 +35,7 @@ cols <- enrichplot:::get_enrichplot_color()
 myplot <- function(res1, res2) {
     x <- merge(res1@result, res2@result, by="ID")
     ggplot(x, aes(pvalue.x, pvalue.y)) + 
-        geom_point(shape=21, fill=cols[2], size=2.5, alpha=.6, stroke=.2) + 
+        geom_point(shape=21, fill=cols[2], size=2.5, alpha=.8, stroke=.02, color='white') + 
         geom_smooth(method='lm', color=cols[1]) +
         geom_abline(slope=1, intercept=0, linetype='dashed', linewidth=1) +
         xlim(0, 1) + ylim(0, 1) + 
