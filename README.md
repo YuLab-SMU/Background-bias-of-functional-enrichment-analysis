@@ -1,3 +1,13 @@
+
+# Background bias in functional enrichment analysis: Insights from clusterProfiler
+
+If you use this work in published research, please cite:
+
+__G Yu__<sup>\*</sup>. [Background bias in functional enrichment analysis: Insights from clusterProfiler](https://doi.org/10.59717/j.xinn-life.2025.100181). __*The Innovation Life*__. 2026, 4(1):100181. 
+
+This repo contains source code to produce **Figure 1** of the above paper.
+
+
 ## Load packages and example data
 
 ``` r
